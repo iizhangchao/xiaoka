@@ -1,0 +1,40 @@
+<template>
+  <view class='msg-err'>
+    <view wx:for='{{errMsg}}' class='msg-item' :class="{'active': item.show}">{{item.msg}}</view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class MsgItem extends wepy.component {
+    props = {
+      msgInfo :{
+        type: Object
+      }
+    }
+  }
+</script>
+<style>
+  .msg-err {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: -10rpx;
+    z-index: 10;
+  }
+
+  .msg-item {
+    transform: translateY(-100%);
+    padding: 20rpx 40rpx;
+    font-size: 34rpx;
+    background-color: #f06;
+    color: #fff;
+    margin: 10rpx 0;
+    transition: all 0.25s;
+    visibility: hidden;
+  }
+
+  .msg-item.active {
+    transform: translateY(0);
+    visibility: visible;
+  }
+</style>

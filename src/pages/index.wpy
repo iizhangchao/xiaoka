@@ -1,0 +1,75 @@
+<style>
+  .add {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    margin-left: -80rpx;
+    width: 160rpx;
+    height: 160rpx;
+  }
+  .add image{
+    width: 100%;
+  }
+
+  .wrap {
+    padding: 0 40rpx;
+  }
+  .pdtop1 {
+    padding-top: 1rpx;
+  }
+</style>
+<template>
+  <view class="wrap pdtop1">
+    <taskItem :taskList="taskList"></taskItem>
+  </view>
+  <view class='add' @tap='handleShowModel'>
+    <image mode='widthFix' src='../images/icon-add-i.png'></image>
+  </view>
+  <addChoose :showModel.sync="isShowModel" :userInfo.sync="userInfo"></addChoose>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import taskItem from '@/components/taskItem'
+  import addChoose from '@/components/addChoose'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '小咖打卡'
+    }
+
+    components = {
+      taskItem,
+      addChoose
+    }
+
+    data = {
+      isShowModel: false,
+      taskList: [],
+      startX: null,
+      progress: 0,
+      userInfo: {}
+    }
+
+    onLoad(){
+      this.getUserInfo()
+    }
+
+    methods = {
+      handleShowModel(){
+        this.isShowModel = true
+      }
+    }
+
+    async getUserInfo () {
+      let {userInfo} = await wepy.getUserInfo()
+
+      this.userInfo =  !!userInfo ? userInfo : {
+        nickName: '二师兄',
+        avatarUrl: '../images/avatar.png'
+      }
+      this.$apply()
+      console.log(this.userInfo)
+    }
+  }
+</script>

@@ -1,0 +1,81 @@
+<template>
+  <view class='add-page'>
+    <repeat for="{{list}}" key="index" index="index" item="item">
+      <addForm :type="type" :index="index" :task="item"></addForm>
+    </repeat>
+    <view class='btn'>
+      <view class='add' @tap='addItemTask'><image mode='widthFix' src='../images/icon-add.png'></image></view>
+      <button @tap='submitTask'>提交</button>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import addForm from '@/components/addForm'
+  export default class AddPage extends wepy.page {
+    components = {
+      addForm
+    }
+    data = {
+      type: null,
+      list: []
+    }
+
+    methods = {
+      submitTask(){}
+    }
+
+    addItemTask () {
+      this.list.push({
+        end: null,
+        title: '',
+        content: '',
+        start: new Date().toLocaleDateString().replace(/\//g, '-'),
+        weeks: [
+          { name: '1', value: '一', checked: false },
+          { name: '2', value: '二', checked: false },
+          { name: '3', value: '三', checked: false },
+          { name: '4', value: '四', checked: false },
+          { name: '5', value: '五', checked: false },
+          { name: '6', value: '六', checked: false },
+          { name: '7', value: '日', checked: false }
+        ]
+      })
+    }
+
+    onLoad(opt){
+      console.log(opt)
+      let type = Number(opt.type)
+      wepy.setNavigationBarTitle({
+        title: type === 1 ? '便签' : '行程'
+      })
+      this.type = type
+      this.addItemTask()
+    }
+  }
+</script>
+<style>
+  .add-page {
+    padding: 40rpx;
+  }
+
+  .btn button {
+    margin: 40rpx;
+    border-radius: 60rpx;
+    background-color: #fff;
+  }
+
+  .btn button::after {
+    border-radius: 120rpx;
+  }
+
+
+
+  .add {
+    width: 140rpx;
+    margin: 0 auto;
+  }
+  .add image {
+    width: 100%;
+  }
+</style>

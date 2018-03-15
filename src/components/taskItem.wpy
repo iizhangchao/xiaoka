@@ -1,0 +1,179 @@
+<template>
+  <view class='task-item'
+        @touchstart='bindstar'
+        @touchend="bindend"
+        @touchmove="bindmove"
+        @tap='clickend'
+        wx:for='{{taskList}}'
+        data-idx="{{index}}"
+        data-tid='{{item.tid}}'>
+    <view class="task-body" style="{{translateX}}">
+      <view class='title'>{{item.title}}</view>
+      <view class='content'>{{item.content}}</view>
+      <view class='handle'>
+        <view class='icon' wx:if='{{!item.handle}}'>
+          <image mode='widthFix' src='../images/icon-wait.png'></image>
+        </view>
+        <view class='icon' wx:else>
+          <image wx:if='{{!item.handleOK}}' mode='widthFix' src='../images/icon-nook.png'></image>
+          <image wx:else='{{item.handleOK}}' mode='widthFix' src='../images/icon-ok.png'></image>
+          <view wx:if='{{item.handleOK}}' class='time'>12:16</view>
+        </view>
+      </view>
+    </view>
+    <view class="task-foot">
+      <view class="task-foot-button red">完成</view>
+      <view class="task-foot-button green">未完成</view>
+      <view class="task-foot-button del">删除</view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class TaskItem extends wepy.component {
+
+    data = {
+      startX: 0,
+      lateX: 0,
+      translateX: ''
+    }
+
+    computed = {
+
+    }
+
+    props = {
+      taskList: Array
+    }
+
+    methods = {
+      bindstar(e){
+        this.startX = e.touches[0].pageX
+      },
+      bindmove(e){
+        let moveX = e.touches[0].pageX
+        let disX = this.startX - moveX
+        let txtStyle = ''
+
+        if (disX === 0 || disX < 0){ // 如果移动距离小于等于0，文本层位置不变
+          txtStyle = 'left:0'
+        }
+        else if (disX > 0 ){ // 移动距离大于0，文本层left值等于手指移动距离
+          txtStyle = `left:-${disX}rpx`
+          if(disX >= 360){
+            // 控制手指移动距离最大值为删除按钮的宽度
+            txtStyle = 'left:-360rpx'
+          }
+        }
+        this.translateX = txtStyle
+      },
+      bindend(e){
+        let endX = e.changedTouches[0].pageX
+        let threshold = Math.abs(this.startX - endX)
+        if (threshold < 30) return false
+        this.translateX = this.startX < endX ? 'left: 0' : 'left: -360rpx'
+      },
+      clickend(e){
+        let idx = e.currentTarget.dataset.idx
+        let tid = e.currentTarget.dataset.tid
+
+        if (this.data.taskList[idx].handle) return false
+
+        let handle = `taskList[${idx}].handle`
+        let handleok = `taskList[${idx}].handleOK`
+
+//        this.setData({
+//          [handle]: 1,
+//          [handleok]: 1
+//        })
+//        database.updateTask({
+//          tid: tid,
+//          completion: 1
+//        })
+      },
+
+    }
+
+
+
+  }
+</script>
+<style>
+  .task-item {
+    position: relative;
+    margin: 40rpx 20rpx 40rpx 0;
+  }
+  .task-body {
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    padding: 40rpx;
+    border-radius: 10rpx;
+    transition: all .3s;
+  }
+  .task-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background-color: #e7e8e9;
+    border-radius: 10rpx;
+  }
+  .task-foot view {
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  .task-item .title {
+    color: #3d3d3d;
+    font-size: 40rpx;
+    padding-bottom: 10rpx;
+  }
+  .task-item .content {
+    color: #999;
+    font-size: 30rpx;
+  }
+  .task-item .handle {
+    position: absolute;
+    right: -35rpx;
+    top: 50%;
+    margin-top: -35rpx;
+  }
+  .handle .icon {
+    width: 70rpx;
+    height: 70rpx;
+    border: 10rpx solid #e7e8e9;
+    border-radius: 50%;
+  }
+  .handle .icon image {
+    width: 100%;
+  }
+  .handle .time {
+    position: absolute;
+    top: 80rpx;
+    font-size: 24rpx;
+    color: #999;
+  }
+  .task-foot-button {
+    background-color: #aaa;
+    color: #fff;
+    padding: 0 20rpx;
+    font-size: 30rpx;
+  }
+  .task-foot-button.red {
+    background-color: #f00;
+  }
+  .task-foot-button.green {
+    background-color: green;
+  }
+  .task-foot-button.del {
+    background-color: #aaa;
+    border-radius: 0 10rpx 10rpx 0;
+  }
+
+</style>

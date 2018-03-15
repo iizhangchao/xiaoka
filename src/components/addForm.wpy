@@ -1,0 +1,165 @@
+<template>
+  <view class='add-form'>
+    <view  @tap='delItemTask' class='add-form-close'></view>
+
+    <view class='add-item'>
+      <view class='add-item-hd'>
+        <label>标题</label>
+      </view>
+      <view class='add-item-bd'>
+        <input data-name='title' data-idx='{{index}}' value='{{item.title}}' @input='inputChangeSetVal'></input>
+      </view>
+    </view>
+
+    <view class='add-item'>
+      <view class='add-item-hd'>
+        <label>描述</label>
+      </view>
+      <view class='add-item-bd'>
+        <textarea data-name='content' data-idx='{{index}}' value='{{item.content}}' @input='inputChangeSetVal'></textarea>
+      </view>
+    </view>
+
+    <!--<view wx:if='{{type === 2}}'>-->
+      <!--<view class='add-item'>-->
+        <!--<view class='add-item-hd'>-->
+          <!--<label>开始日期</label>-->
+        <!--</view>-->
+        <!--<view class='add-item-bd'>-->
+          <!--<picker mode="date" data-name='start' data-idx='{{index}}' @change='inputChangeSetVal' start="{{item.start}}">{{item.start}}</picker>-->
+        <!--</view>-->
+      <!--</view>-->
+
+      <!--<view class='add-item'>-->
+        <!--<view class='add-item-hd'>-->
+          <!--<label>结束日期</label>-->
+        <!--</view>-->
+        <!--<view class='add-item-bd'>-->
+          <!--<picker mode="date" data-name='end' data-idx='{{index}}' @change='inputChangeSetVal' start="{{item.start}}">-->
+            <!--{{item.end !== null ? item.end : item.start}}</picker>-->
+        <!--</view>-->
+      <!--</view>-->
+
+      <!--<view class='add-item add-item-tip'>-->
+        <!--<checkbox-group bindchange='weeksChange' data-idx='{{index}}' class='add-item-weeks'>-->
+          <!--<label wx:for='{{item.weeks}}' wx:for-item='week' class='txt {{week.checked ? "active" : ""}}'>-->
+            <!--<checkbox hidden value='{{week.name}}' checked='{{week.checked}}'></checkbox>-->
+            <!--{{week.value}}-->
+          <!--</label>-->
+        <!--</checkbox-group>-->
+        <!--<view class='tip'>提示：选择周几会出现，不选择默认每天</view>-->
+      <!--</view>-->
+
+    <!--</view>-->
+
+    <!--<view wx:else>-->
+      <!--<view class='add-item'>-->
+        <!--<view class='add-item-hd'>-->
+          <!--<label>开始日期</label>-->
+        <!--</view>-->
+        <!--<view class='add-item-bd'>-->
+          <!--<picker mode="date" start="{{item.start}}" data-idx='{{index}}' data-name='start' bindchange='inputChangeSetVal'>{{item.start}}</picker>-->
+        <!--</view>-->
+      <!--</view>-->
+    <!--</view>-->
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class AddForm extends wepy.component {
+    props = {
+      type: Number,
+      index: Number
+    }
+    methods = {
+      delItemTask(){},
+      inputChangeSetVal(){}
+    }
+  }
+</script>
+<style>
+  .add-form {
+    border-radius: 20rpx;
+    margin-bottom: 40rpx;
+    position: relative;
+    background: #fff;
+  }
+
+  .add-form-close {
+    position: absolute;
+    right: -10rpx;
+    top: -10rpx;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60rpx;
+    color: #fff;
+    background-color: #f06;
+    border: 10rpx solid #f7f7f7;
+  }
+  .add-form-close::after {
+    content: '\2716'
+  }
+  input {
+    width: 90%;
+  }
+
+  .add-item {
+    display: flex;
+    padding: 20rpx;
+    background-color: #fff;
+    border-bottom: 1rpx solid #f0f0f0;
+    font-size: 34rpx;
+    line-height: 1.4rem;
+    border-radius: 20rpx;
+  }
+
+  .add-item-hd {
+    width: 180rpx;
+    height: 1.4rem;
+  }
+
+  .add-item-hd label {
+    color: #999;
+  }
+
+  .add-item-bd {
+    flex: 1;
+  }
+
+  .add-item-bd textarea {
+    width: 100%;
+    height: 170rpx;
+  }
+  .add-item-weeks {
+    display: flex;
+    width: 100%;
+  }
+
+  .add-item-weeks .txt {
+    flex: 1;
+    border: 1rpx solid #ccc;
+    margin-left: -1rpx;
+    text-align: center;
+    padding: 16rpx 0;
+    line-height: 1;
+  }
+
+  .txt.active {
+    border-color: #f06;
+    position: relative;
+    z-index: 1;
+  }
+
+  .add-item-tip {
+    display: block;
+  }
+
+  .add-item-tip .tip {
+    color: #999;
+    font-size: 28rpx;
+    padding-top: 10rpx;
+  }
+
+</style>

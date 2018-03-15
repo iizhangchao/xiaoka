@@ -1,0 +1,47 @@
+<style lang="less">
+  page {
+    background-color: #f7f7f7;
+  }
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/add'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: '小咖',
+      navigationBarTextStyle: 'black'
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
+
+  onLaunch() {
+    this.getUserInfo()
+  }
+
+  async getUserInfo() {
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    let {userInfo} = await wepy.getUserInfo()
+    this.globalData.userInfo = userInfo
+  }
+}
+</script>
